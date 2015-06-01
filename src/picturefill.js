@@ -15,6 +15,7 @@
 		} else if ( typeof define === "function" && define.amd ) {
 			// AMD support
 			define( "picturefill", function() { return picturefill; } );
+			w.picturefill = picturefill;
 		}
 		if ( typeof w === "object" ) {
 			// If no AMD and we are in the browser, attach to window
@@ -23,10 +24,10 @@
 	}
 
 	// If picture is supported, well, that's awesome. Let's get outta here...
-	if ( w.HTMLPictureElement ) {
+	/*if ( w.HTMLPictureElement ) {
 		expose(function() { });
 		return;
-	}
+	}*/
 
 	// HTML shim|v it for old IE (IE9 will still need the HTML video tag workaround)
 	doc.createElement( "picture" );
@@ -677,7 +678,9 @@
 		}
 	}
 
-	runPicturefill();
+	if ( w.HTMLPictureElement ) {
+		runPicturefill();
+	}
 
 	/* expose methods for testing */
 	picturefill._ = pf;
