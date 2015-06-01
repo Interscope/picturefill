@@ -1,52 +1,3 @@
-/*! Picturefill - v2.3.1 - 2015-04-09
-* http://scottjehl.github.io/picturefill
-* Copyright (c) 2015 https://github.com/scottjehl/picturefill/blob/master/Authors.txt; Licensed MIT */
-/*! matchMedia() polyfill - Test a CSS media type/query in JS. Authors & copyright (c) 2012: Scott Jehl, Paul Irish, Nicholas Zakas, David Knight. Dual MIT/BSD license */
-
-window.matchMedia || (window.matchMedia = function() {
-	"use strict";
-
-	// For browsers that support matchMedium api such as IE 9 and webkit
-	var styleMedia = (window.styleMedia || window.media);
-
-	// For those that don't support matchMedium
-	if (!styleMedia) {
-		var style       = document.createElement('style'),
-			script      = document.getElementsByTagName('script')[0],
-			info        = null;
-
-		style.type  = 'text/css';
-		style.id    = 'matchmediajs-test';
-
-		script.parentNode.insertBefore(style, script);
-
-		// 'style.currentStyle' is used by IE <= 8 and 'window.getComputedStyle' for all other browsers
-		info = ('getComputedStyle' in window) && window.getComputedStyle(style, null) || style.currentStyle;
-
-		styleMedia = {
-			matchMedium: function(media) {
-				var text = '@media ' + media + '{ #matchmediajs-test { width: 1px; } }';
-
-				// 'style.styleSheet' is used by IE <= 8 and 'style.textContent' for all other browsers
-				if (style.styleSheet) {
-					style.styleSheet.cssText = text;
-				} else {
-					style.textContent = text;
-				}
-
-				// Test if media query is true or false
-				return info.width === '1px';
-			}
-		};
-	}
-
-	return function(media) {
-		return {
-			matches: styleMedia.matchMedium(media || 'all'),
-			media: media || 'all'
-		};
-	};
-}());
 /*! Picturefill - Responsive Images that work today.
 *  Author: Scott Jehl, Filament Group, 2012 ( new proposal implemented by Shawn Jansepar )
 *  License: MIT/GPLv2
@@ -64,6 +15,7 @@ window.matchMedia || (window.matchMedia = function() {
 		} else if ( typeof define === "function" && define.amd ) {
 			// AMD support
 			define( "picturefill", function() { return picturefill; } );
+			w.picturefill = picturefill;
 		}
 		if ( typeof w === "object" ) {
 			// If no AMD and we are in the browser, attach to window
@@ -72,10 +24,10 @@ window.matchMedia || (window.matchMedia = function() {
 	}
 
 	// If picture is supported, well, that's awesome. Let's get outta here...
-	if ( w.HTMLPictureElement ) {
+	/*if ( w.HTMLPictureElement ) {
 		expose(function() { });
 		return;
-	}
+	}*/
 
 	// HTML shim|v it for old IE (IE9 will still need the HTML video tag workaround)
 	doc.createElement( "picture" );
@@ -726,7 +678,9 @@ window.matchMedia || (window.matchMedia = function() {
 		}
 	}
 
-	runPicturefill();
+	if ( w.HTMLPictureElement ) {
+		runPicturefill();
+	}
 
 	/* expose methods for testing */
 	picturefill._ = pf;
